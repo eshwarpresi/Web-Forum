@@ -1,4 +1,4 @@
-// Load environment variables FIRST
+// Load environment variables FIRST - only once!
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
@@ -16,10 +16,10 @@ const rateLimit = require('express-rate-limit');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Rate limiting to prevent spam
+// Rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5 // limit each IP to 5 requests per windowMs
+    windowMs: 15 * 60 * 1000,
+    max: 5
 });
 
 // Middleware
@@ -41,7 +41,6 @@ app.get('/success', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-    console.log('📧 Email system ready to send messages');
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });
