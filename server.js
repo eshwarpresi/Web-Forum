@@ -42,7 +42,7 @@ app.get('/success', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'success.html'));
 });
 
-// Health check endpoint for Render
+// Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({ 
         status: 'OK', 
@@ -62,9 +62,14 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something went wrong!');
 });
 
-// Start server - listen on all network interfaces
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📧 Email system ready to send messages`);
-    console.log(`🌍 Health check: http://localhost:${PORT}/health`);
-});
+// Start server - only for local development
+if (require.main === module) {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+        console.log(`📧 Email system ready to send messages`);
+        console.log(`🌍 Health check: http://localhost:${PORT}/health`);
+    });
+}
+
+// Export for Vercel (IMPORTANT: Add this line!)
+module.exports = app;
